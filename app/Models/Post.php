@@ -2,42 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Post
+class Post extends Model
 {
-    public static function all()
+    use HasFactory;
+    protected $fillable = ['title', 'slug', 'author', 'body'];
+
+    public function author(): BelongsTo
     {
-        return [
-            [
-                "id" => 1,
-                "slug" => "judul-article-1",
-                "title" => "Judul Article 1",
-                "author" => "Muhammad Dzulfikri",
-                "body" => "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consequatur consectetur soluta, quisquam
-                recusandae neque repellendus ipsum asperiores. Corrupti nam tenetur, consequuntur incidunt, dolorem
-                asperiores omnis soluta nisi, harum qui minus."
-
-            ],
-            [
-                "id" => 2,
-                "slug" => "judul-article-2",
-                "title" => "Judul Article 2",
-                "author" => "Muhammad Dzulfikri",
-                "body" => "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consequatur consectetur soluta, quisquam
-                recusandae neque repellendus ipsum asperiores. Corrupti nam tenetur, consequuntur incidunt, dolorem
-                asperiores omnis soluta nisi, harum qui minus."
-
-            ],
-        ];
+        return $this->belongsTo(User::class);
     }
 
-    public static function find($slug): array
+    public function category(): BelongsTo
     {
-        $post =  Arr::first(static::all(), fn($post) => $post['slug'] == $slug);
-        if (!$post) {
-            abort(404);
-        }
-        return $post;
+        return $this->belongsTo(Category::class);
     }
 }
