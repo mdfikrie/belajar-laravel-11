@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,6 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Post::factory(100)->recycle([User::factory(3)->create(), Category::factory(5)->create()])->create();
+        $this->call([UserSeeder::class, CategorySeeder::class]);
+        Post::factory(100)->recycle([
+            User::all(),
+            Category::all(),
+        ])->create();
     }
 }
